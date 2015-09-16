@@ -13,5 +13,9 @@
     "Node.js"
   ],
   "author": "LearningTech",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "request": "^2.62.0"
+  }
 }
