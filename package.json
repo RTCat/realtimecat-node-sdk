@@ -1,0 +1,17 @@
+{
+  "name": "realtimecat-node-sdk",
+  "version": "0.1.0",
+  "description": "RealTimeCat Server SDK for Node.js",
+  "main": "lib/realtimecat.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [
+    "RealTimeCat",
+    "Server",
+    "SDK",
+    "Node.js"
+  ],
+  "author": "LearningTech",
+  "license": "MIT"
+}
