@@ -1,5 +1,5 @@
 # realtimecat-node-sdk
-实时猫 Node.js SDK | RealTimeCat SDK for Node.js
+实时猫 NodeJS Server SDK | RealTimeCat Server SDK for Node.js
 
 ## Usage
 
