@@ -16,7 +16,18 @@ realTimeCat.createSession(function (err, sessionId) {
     session = sessionId;
 });
 
+// 参数中不传token的type，默认type为pub
 realTimeCat.getToken({session_id: session}, function (err, token) {
+        if (err) throw err;
+        console.log(token)
+});
+
+// 参数中传token的type
+var opts = {
+        type: 'sub',
+        session_id: session
+    };
+realTimeCat.getToken(opts, function (err, token) {
         if (err) throw err;
         console.log(token)
 });
