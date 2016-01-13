@@ -606,6 +606,11 @@ class Client {
         });
     }
 
+    /**
+     * Delete a token
+     * @param token_id
+     * @param cb
+     */
     delToken(token_id, cb) {
         if (typeof token_id === 'undefined') {
             throw new Error('Session Id is required')

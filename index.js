@@ -693,6 +693,13 @@ var Client = function () {
                 cb(null, response);
             });
         }
+
+        /**
+         * Delete a token
+         * @param token_id
+         * @param cb
+         */
+
     }, {
         key: 'delToken',
         value: function delToken(token_id, cb) {
