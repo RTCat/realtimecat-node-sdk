@@ -2,7 +2,7 @@
   "name": "realtimecat-node-sdk",
   "version": "0.2.0",
   "description": "RealTimeCat Server SDK for Node.js",
-  "main": "lib/realtimecat.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
