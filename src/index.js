@@ -516,7 +516,131 @@ class Client {
         });
     }
 
-    
+    /**
+     * Get a token
+     * @param token_id
+     * @param cb
+     */
+    token(token_id, cb){
+        if (typeof token_id === 'undefined') {
+            throw new Error('Token Id is required')
+        }
+        request({
+            url: this.apiUrl + this.endpoints.token + token_id,
+            headers: {
+                'X-RTCAT-APIKEY': this.apiKey,
+                'X-RTCAT-SECRET': this.apiSecret
+            }
+        }, function (err, resp, body) {
+            if (err) return cb(new Error('The request failed: ' + err));
+
+            // handle client errors
+            if (resp.statusCode === 403) {
+                return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            // handle server errors
+            if (resp.statusCode >= 500 && resp.statusCode <= 599) {
+                return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            let response = JSON.parse(body);
+
+            // handle response errors
+            if (response.error) {
+                return cb(new Error(`${response.error}: ${response.description}`))
+            }
+
+            cb(null, response);
+        });
+    }
+
+    /**
+     * Update a token
+     * @param token_id
+     * @param label
+     * @param persistent
+     * @param data
+     * @param live_days
+     * @param cb
+     */
+    updateToken({token_id, label, persistent, data, live_days}={}, cb) {
+        if (typeof token_id === 'undefined') {
+            throw new Error('Token Id is required')
+        }
+        let opts = {
+            token_id: token_id,
+            label: label,
+            persistent: persistent,
+            data: data,
+            live_days: live_days
+        };
+        request.patch({
+            url: this.apiUrl + this.endpoints.token + token_id,
+            form: opts,
+            headers: {
+                'X-RTCAT-APIKEY': this.apiKey,
+                'X-RTCAT-SECRET': this.apiSecret
+            }
+        }, function (err, resp, body) {
+            if (err) return cb(new Error('The request failed: ' + err));
+
+            // handle client errors
+            if (resp.statusCode === 403) {
+                return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            // handle server errors
+            if (resp.statusCode >= 500 && resp.statusCode <= 599) {
+                return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            let response = JSON.parse(body);
+
+            // handle response errors
+            if (response.error) {
+                return cb(new Error(`${response.error}: ${response.description}`))
+            }
+
+            cb(null, response);
+        });
+    }
+
+    delToken(token_id, cb) {
+        if (typeof token_id === 'undefined') {
+            throw new Error('Session Id is required')
+        }
+        request.del({
+            url: this.apiUrl + this.endpoints.token + token_id,
+            headers: {
+                'X-RTCAT-APIKEY': this.apiKey,
+                'X-RTCAT-SECRET': this.apiSecret
+            }
+        }, function (err, resp, body) {
+            if (err) return cb(new Error('The request failed: ' + err));
+
+            // handle client errors
+            if (resp.statusCode === 403) {
+                return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            // handle server errors
+            if (resp.statusCode >= 500 && resp.statusCode <= 599) {
+                return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
+            }
+
+            if (body) {
+                let response = JSON.parse(body);
+                // handle response errors
+                if (response.error) {
+                    return cb(new Error(response.error + ': ' + response.description));
+                }
+            }
+
+            cb(null, {status: "delete successfully"});
+        });
+    }
+
 }
 
 module.exports = Client;

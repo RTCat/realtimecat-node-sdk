@@ -164,4 +164,37 @@ describe('Tokens', function () {
         })
     });
 
+    describe('token', function () {
+        it('should return a token', function (done) {
+            client.token('8904c2be-59ae-4363-8bf9-b7d1d3e0467e', function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                done();
+            })
+        })
+    });
+
+    describe('update token', function () {
+        it('should update the token', function (done) {
+            client.updateToken({
+                token_id: '8904c2be-59ae-4363-8bf9-b7d1d3e0467e',
+                label: 'test222'
+            }, function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                done();
+            })
+        })
+    });
+
+    describe('del token', function () {
+        it('should delete the token', function (done) {
+            client.delToken("8904c2be-59ae-4363-8bf9-b7d1d3e0467e", function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                done();
+            })
+        })
+    });
+
 });
