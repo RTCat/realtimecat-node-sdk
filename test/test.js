@@ -40,87 +40,87 @@ describe('Client', function () {
 
 });
 
-//describe('Sessions', function(){
-//    describe('create sessions', function () {
-//        it('should create a session', function (done) {
-//            client.createSession({label:'test'},function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                sessionId = resp.uuid;
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('sessions', function () {
-//        it('should return all sessions', function (done) {
-//            client.sessions(function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('permanent sessions', function () {
-//        it('should return permanent sessions', function (done) {
-//            client.permanentSessions(function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('temporary sessions', function () {
-//        it('should return temporary sessions', function (done) {
-//            client.temporarySessions(function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('session', function () {
-//        it('should return a session', function (done) {
-//            client.session(sessionId, function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('update session', function () {
-//        it('should update the session', function (done) {
-//            client.updateSession({
-//                session_id: sessionId,
-//                label: 'test222'
-//            }, function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//
-//    describe('del session', function () {
-//        it('should delete the session', function (done) {
-//            client.delSession(sessionId, function (err, resp) {
-//                if (err)throw err;
-//                console.log(resp);
-//                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
-//                done();
-//            })
-//        })
-//    });
-//});
+describe('Sessions', function(){
+    describe('create sessions', function () {
+        it('should create a session', function (done) {
+            client.createSession({label:'test'},function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                sessionId = resp.uuid;
+                done();
+            })
+        })
+    });
+
+    describe('sessions', function () {
+        it('should return all sessions', function (done) {
+            client.sessions(function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+
+    describe('permanent sessions', function () {
+        it('should return permanent sessions', function (done) {
+            client.permanentSessions(function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+
+    describe('temporary sessions', function () {
+        it('should return temporary sessions', function (done) {
+            client.temporarySessions(function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+
+    describe('session', function () {
+        it('should return a session', function (done) {
+            client.session(sessionId, function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+
+    describe('update session', function () {
+        it('should update the session', function (done) {
+            client.updateSession({
+                session_id: sessionId,
+                label: 'test222'
+            }, function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+
+    describe('del session', function () {
+        it('should delete the session', function (done) {
+            client.delSession(sessionId, function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
+                done();
+            })
+        })
+    });
+});
 
 describe('Tokens', function () {
 
