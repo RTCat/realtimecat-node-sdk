@@ -1,7 +1,7 @@
 var RealTimeCat = require('../lib/realtimecat.js');
 
-var apiKey = "7615a724-7e23-43d6-b85a-512a876c21e8";
-var apiSecret = "dde16be0-fb55-47f0-8fc6-4e25c1167bab";
+var apiKey = "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx";
+var apiSecret = "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx";
 var realTimeCat = new RealTimeCat(apiKey, apiSecret);
 
 // Simple createSession Test
