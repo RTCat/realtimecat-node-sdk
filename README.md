@@ -1,6 +1,28 @@
 # realtimecat-node-sdk
 实时猫 NodeJS Server SDK | RealTimeCat Server SDK for Node.js
 
+## 0.2.0
+
+0.2.0版SDK配合0.2版实时猫接口使用
+
+### Install
+
+`npm install realtimecat-node-sdk --save`
+
+### Usage
+
+```javascript
+var RealTimeCat = require('realtimecat-node-sdk');
+
+var apiKey = "";
+var apiSecret = "";
+var realtimecat = new RealTimeCat(apiKey, apiSecret);
+```
+
+### API
+
+请阅读API[文档](docs/API.md)
+
 ## 0.1.0
 
 0.1.0版SDK配合实时猫 RealTimeCat Server API version 0.1接口使用

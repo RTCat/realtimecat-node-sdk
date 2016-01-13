@@ -44,8 +44,8 @@ class Client {
     }
 
     /**
-     * Get api basic info
-     * @param cb
+     * Get API Basic Info 获取本 API 基本信息
+     * @param cb 回调函数
      */
     info(cb) {
         request({
@@ -62,13 +62,13 @@ class Client {
     }
 
     /**
-     * Create a session
-     * @param label
-     * @param data
-     * @param live_days
-     * @param type = p2p | rel
-     * @param persistent
-     * @param cb
+     * Create a Session 新建Session
+     * @param label 可选，供开发者区分Session,长度255
+     * @param data 开发者自定义数据,长度1024
+     * @param live_days 存活时间
+     * @param type 类型,仅可以为p2p或rel
+     * @param persistent true/false, 为true时Session永不过期
+     * @param cb 回调函数
      */
     createSession({label, data, live_days,type='p2p', persistent=false}={}, cb) {
         let opts = {
@@ -111,8 +111,8 @@ class Client {
     }
 
     /**
-     * Query sessions
-     * @param cb
+     * Query Sessions 获取Session列表
+     * @param cb 回调函数
      */
     sessions(cb) {
         request({
@@ -146,8 +146,8 @@ class Client {
     }
 
     /**
-     * Query permanent sessions
-     * @param cb
+     * Query Permanent Sessions 获取永久Session列表
+     * @param cb 回调函数
      */
     permanentSessions(cb) {
         request({
@@ -181,8 +181,8 @@ class Client {
     }
 
     /**
-     * Query temporary sessions
-     * @param cb
+     * Query Temporary Sessions 获取临时Session列表
+     * @param cb 回调函数
      */
     temporarySessions(cb) {
         request({
@@ -216,9 +216,9 @@ class Client {
     }
 
     /**
-     * Get a specific session
-     * @param session_id
-     * @param cb
+     * Get a Specific Session 获取单个Session
+     * @param session_id Session ID
+     * @param cb 回调函数
      */
     session(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -255,13 +255,13 @@ class Client {
     }
 
     /**
-     * Update a session
-     * @param session_id
-     * @param label
-     * @param persistent
-     * @param data
-     * @param live_days
-     * @param cb
+     * Update a Session 修改单个Session
+     * @param session_id Session ID
+     * @param label 可选，供开发者区分Session,长度255
+     * @param persistent true/false, 为true时Session永不过期
+     * @param data 开发者自定义数据,长度1024
+     * @param live_days 存活时间
+     * @param cb 回调函数
      */
     updateSession({session_id, label, persistent, data, live_days}={}, cb) {
         if (typeof session_id === 'undefined') {
@@ -306,9 +306,9 @@ class Client {
     }
 
     /**
-     * Delete a session
-     * @param session_id
-     * @param cb
+     * Delete a Session 删除单个Session
+     * @param session_id Session ID
+     * @param cb 回调函数
      */
     delSession(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -346,14 +346,14 @@ class Client {
     }
 
     /**
-     * Create a token
-     * @param session_id
-     * @param label
-     * @param data
-     * @param live_days
-     * @param type = 'pub' | 'sub'
-     * @param persistent = true | false
-     * @param cb
+     * Create a Token Under a Session 创建Session ID下的Token
+     * @param session_id Session ID
+     * @param label 可选，供开发者区分Token,长度255
+     * @param data 开发者自定义数据,长度1024
+     * @param live_days 存活时间
+     * @param type 类型,仅可以为pub或sub
+     * @param persistent true/false,为true时Token永不过期
+     * @param cb 回调函数
      */
     createToken({session_id,label,data,live_days, type='pub',persistent=false}={}, cb) {
         if (typeof session_id === 'undefined') {
@@ -400,9 +400,9 @@ class Client {
     }
 
     /**
-     * Query tokens
-     * @param session_id
-     * @param cb
+     * Query Tokens Under a Session 获取Session ID下的所有Token列表
+     * @param session_id Session ID
+     * @param cb 回调函数
      */
     tokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -439,9 +439,9 @@ class Client {
     }
 
     /**
-     * Query permanent tokens
-     * @param session_id
-     * @param cb
+     * Query Permanent Tokens 获取永久Token列表
+     * @param session_id Session ID
+     * @param cb 回调函数
      */
     permanentTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -478,9 +478,9 @@ class Client {
     }
 
     /**
-     * Query temporary tokens
-     * @param session_id
-     * @param cb
+     * Query Temporary Tokens 获取临时Token列表
+     * @param session_id Session ID
+     * @param cb 回调函数
      */
     temporaryTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -517,9 +517,9 @@ class Client {
     }
 
     /**
-     * Get a token
-     * @param token_id
-     * @param cb
+     * Get a Token 获取单个Token
+     * @param token_id Token ID
+     * @param cb 回调函数
      */
     token(token_id, cb){
         if (typeof token_id === 'undefined') {
@@ -556,13 +556,13 @@ class Client {
     }
 
     /**
-     * Update a token
-     * @param token_id
-     * @param label
-     * @param persistent
-     * @param data
-     * @param live_days
-     * @param cb
+     * Update a Token 修改单个Token
+     * @param token_id Token ID
+     * @param label 可选，供开发者区分Token,长度255
+     * @param persistent 为true时Token永不过期
+     * @param data 开发者自定义数据,长度1024
+     * @param live_days 存活时间
+     * @param cb 回调函数
      */
     updateToken({token_id, label, persistent, data, live_days}={}, cb) {
         if (typeof token_id === 'undefined') {
@@ -607,9 +607,9 @@ class Client {
     }
 
     /**
-     * Delete a token
-     * @param token_id
-     * @param cb
+     * Delete a Token 删除单个Token
+     * @param token_id Token ID
+     * @param cb 回调函数
      */
     delToken(token_id, cb) {
         if (typeof token_id === 'undefined') {
