@@ -25,7 +25,7 @@ var realtimecat = new RealTimeCat(apiKey, apiSecret);
 
 ## 0.1.0
 
-0.1.0版SDK配合实时猫 RealTimeCat Server API version 0.1接口使用
+0.1.0版SDK配合0.1版实时猫接口使用
 
 ### Install
 
