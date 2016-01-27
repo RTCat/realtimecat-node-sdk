@@ -18,7 +18,14 @@ var Client = function () {
      * @param apiSecret
      */
 
-    function Client(apiKey, apiSecret) {
+    function Client() {
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var apiKey = _ref.apiKey;
+        var apiSecret = _ref.apiSecret;
+        var _ref$apiUrl = _ref.apiUrl;
+        var apiUrl = _ref$apiUrl === undefined ? 'http://127.0.0.1:8000' : _ref$apiUrl;
+
         _classCallCheck(this, Client);
 
         if (typeof apiKey === 'undefined') {
@@ -29,8 +36,7 @@ var Client = function () {
         this.version = '0.2.0';
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
-        //this.apiUrl = 'https://api.realtimecat.com/';
-        this.apiUrl = 'http://127.0.0.1:8000';
+        this.apiUrl = apiUrl;
         this.endpoints = {
             info: '/v0.2/',
             sessions: '/v0.2/sessions',
@@ -51,8 +57,8 @@ var Client = function () {
     }
 
     /**
-     * Get api basic info
-     * @param cb
+     * Get API Basic Info 获取本 API 基本信息
+     * @param cb 回调函数
      */
 
     _createClass(Client, [{
@@ -72,27 +78,27 @@ var Client = function () {
         }
 
         /**
-         * Create a session
-         * @param label
-         * @param data
-         * @param live_days
-         * @param type = p2p | rel
-         * @param persistent
-         * @param cb
+         * Create a Session 新建Session
+         * @param label 可选，供开发者区分Session,长度255
+         * @param data 开发者自定义数据,长度1024
+         * @param live_days 存活时间
+         * @param type 类型,仅可以为p2p或rel
+         * @param persistent true/false, 为true时Session永不过期
+         * @param cb 回调函数
          */
 
     }, {
         key: 'createSession',
         value: function createSession() {
-            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+            var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var label = _ref.label;
-            var data = _ref.data;
-            var live_days = _ref.live_days;
-            var _ref$type = _ref.type;
-            var type = _ref$type === undefined ? 'p2p' : _ref$type;
-            var _ref$persistent = _ref.persistent;
-            var persistent = _ref$persistent === undefined ? false : _ref$persistent;
+            var label = _ref2.label;
+            var data = _ref2.data;
+            var live_days = _ref2.live_days;
+            var _ref2$type = _ref2.type;
+            var type = _ref2$type === undefined ? 'p2p' : _ref2$type;
+            var _ref2$persistent = _ref2.persistent;
+            var persistent = _ref2$persistent === undefined ? false : _ref2$persistent;
             var cb = arguments[1];
 
             var opts = {
@@ -134,8 +140,8 @@ var Client = function () {
         }
 
         /**
-         * Query sessions
-         * @param cb
+         * Query Sessions 获取Session列表
+         * @param cb 回调函数
          */
 
     }, {
@@ -172,8 +178,8 @@ var Client = function () {
         }
 
         /**
-         * Query permanent sessions
-         * @param cb
+         * Query Permanent Sessions 获取永久Session列表
+         * @param cb 回调函数
          */
 
     }, {
@@ -210,8 +216,8 @@ var Client = function () {
         }
 
         /**
-         * Query temporary sessions
-         * @param cb
+         * Query Temporary Sessions 获取临时Session列表
+         * @param cb 回调函数
          */
 
     }, {
@@ -248,9 +254,9 @@ var Client = function () {
         }
 
         /**
-         * Get a specific session
-         * @param session_id
-         * @param cb
+         * Get a Specific Session 获取单个Session
+         * @param session_id Session ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -290,25 +296,25 @@ var Client = function () {
         }
 
         /**
-         * Update a session
-         * @param session_id
-         * @param label
-         * @param persistent
-         * @param data
-         * @param live_days
-         * @param cb
+         * Update a Session 修改单个Session
+         * @param session_id Session ID
+         * @param label 可选，供开发者区分Session,长度255
+         * @param persistent true/false, 为true时Session永不过期
+         * @param data 开发者自定义数据,长度1024
+         * @param live_days 存活时间
+         * @param cb 回调函数
          */
 
     }, {
         key: 'updateSession',
         value: function updateSession() {
-            var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+            var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var session_id = _ref2.session_id;
-            var label = _ref2.label;
-            var persistent = _ref2.persistent;
-            var data = _ref2.data;
-            var live_days = _ref2.live_days;
+            var session_id = _ref3.session_id;
+            var label = _ref3.label;
+            var persistent = _ref3.persistent;
+            var data = _ref3.data;
+            var live_days = _ref3.live_days;
             var cb = arguments[1];
 
             if (typeof session_id === 'undefined') {
@@ -353,9 +359,9 @@ var Client = function () {
         }
 
         /**
-         * Delete a session
-         * @param session_id
-         * @param cb
+         * Delete a Session 删除单个Session
+         * @param session_id Session ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -396,29 +402,29 @@ var Client = function () {
         }
 
         /**
-         * Create a token
-         * @param session_id
-         * @param label
-         * @param data
-         * @param live_days
-         * @param type = 'pub' | 'sub'
-         * @param persistent = true | false
-         * @param cb
+         * Create a Token Under a Session 创建Session ID下的Token
+         * @param session_id Session ID
+         * @param label 可选，供开发者区分Token,长度255
+         * @param data 开发者自定义数据,长度1024
+         * @param live_days 存活时间
+         * @param type 类型,仅可以为pub或sub
+         * @param persistent true/false,为true时Token永不过期
+         * @param cb 回调函数
          */
 
     }, {
         key: 'createToken',
         value: function createToken() {
-            var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+            var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var session_id = _ref3.session_id;
-            var label = _ref3.label;
-            var data = _ref3.data;
-            var live_days = _ref3.live_days;
-            var _ref3$type = _ref3.type;
-            var type = _ref3$type === undefined ? 'pub' : _ref3$type;
-            var _ref3$persistent = _ref3.persistent;
-            var persistent = _ref3$persistent === undefined ? false : _ref3$persistent;
+            var session_id = _ref4.session_id;
+            var label = _ref4.label;
+            var data = _ref4.data;
+            var live_days = _ref4.live_days;
+            var _ref4$type = _ref4.type;
+            var type = _ref4$type === undefined ? 'pub' : _ref4$type;
+            var _ref4$persistent = _ref4.persistent;
+            var persistent = _ref4$persistent === undefined ? false : _ref4$persistent;
             var cb = arguments[1];
 
             if (typeof session_id === 'undefined') {
@@ -464,9 +470,9 @@ var Client = function () {
         }
 
         /**
-         * Query tokens
-         * @param session_id
-         * @param cb
+         * Query Tokens Under a Session 获取Session ID下的所有Token列表
+         * @param session_id Session ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -506,9 +512,9 @@ var Client = function () {
         }
 
         /**
-         * Query permanent tokens
-         * @param session_id
-         * @param cb
+         * Query Permanent Tokens 获取永久Token列表
+         * @param session_id Session ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -548,9 +554,9 @@ var Client = function () {
         }
 
         /**
-         * Query temporary tokens
-         * @param session_id
-         * @param cb
+         * Query Temporary Tokens 获取临时Token列表
+         * @param session_id Session ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -590,9 +596,9 @@ var Client = function () {
         }
 
         /**
-         * Get a token
-         * @param token_id
-         * @param cb
+         * Get a Token 获取单个Token
+         * @param token_id Token ID
+         * @param cb 回调函数
          */
 
     }, {
@@ -632,25 +638,25 @@ var Client = function () {
         }
 
         /**
-         * Update a token
-         * @param token_id
-         * @param label
-         * @param persistent
-         * @param data
-         * @param live_days
-         * @param cb
+         * Update a Token 修改单个Token
+         * @param token_id Token ID
+         * @param label 可选，供开发者区分Token,长度255
+         * @param persistent 为true时Token永不过期
+         * @param data 开发者自定义数据,长度1024
+         * @param live_days 存活时间
+         * @param cb 回调函数
          */
 
     }, {
         key: 'updateToken',
         value: function updateToken() {
-            var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+            var _ref5 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var token_id = _ref4.token_id;
-            var label = _ref4.label;
-            var persistent = _ref4.persistent;
-            var data = _ref4.data;
-            var live_days = _ref4.live_days;
+            var token_id = _ref5.token_id;
+            var label = _ref5.label;
+            var persistent = _ref5.persistent;
+            var data = _ref5.data;
+            var live_days = _ref5.live_days;
             var cb = arguments[1];
 
             if (typeof token_id === 'undefined') {
@@ -695,9 +701,9 @@ var Client = function () {
         }
 
         /**
-         * Delete a token
-         * @param token_id
-         * @param cb
+         * Delete a Token 删除单个Token
+         * @param token_id Token ID
+         * @param cb 回调函数
          */
 
     }, {

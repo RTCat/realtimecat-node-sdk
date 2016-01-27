@@ -2,11 +2,11 @@
 
 var assert = require('assert');
 var Client = require('../index');
-var apiKey = '5235f94f-3cfa-4c24-943e-c0d5316bd544';
-var apiSecret = 'ffbb2c56-b67c-44b6-ae7b-a83f8e4089aa';
+var apiKey = 'd8cf2c2c-fac7-4b5a-a1be-9a9665ba908c';
+var apiSecret = '99ca8fad-fd1f-499e-8849-3d5086735e93';
 var sessionId;
 
-var client = new Client(apiKey, apiSecret);
+var client = new Client({apiKey: apiKey, apiSecret: apiSecret});
 
 describe('Client', function () {
 
@@ -40,10 +40,10 @@ describe('Client', function () {
 
 });
 
-describe('Sessions', function(){
+describe('Sessions', function () {
     describe('create sessions', function () {
         it('should create a session', function (done) {
-            client.createSession({label:'test'},function (err, resp) {
+            client.createSession({label: 'test'}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 sessionId = resp.uuid;

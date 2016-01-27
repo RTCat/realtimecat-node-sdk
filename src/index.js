@@ -12,7 +12,7 @@ class Client {
      * @param apiKey
      * @param apiSecret
      */
-    constructor(apiKey, apiSecret) {
+    constructor({apiKey, apiSecret, apiUrl='http://127.0.0.1:8000'}={}) {
         if (typeof apiKey === 'undefined') {
             throw new Error('API Key 不能为空')
         }
@@ -22,8 +22,7 @@ class Client {
         this.version = '0.2.0';
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
-        //this.apiUrl = 'https://api.realtimecat.com/';
-        this.apiUrl = 'http://127.0.0.1:8000';
+        this.apiUrl = apiUrl;
         this.endpoints = {
             info: '/v0.2/',
             sessions: '/v0.2/sessions',
@@ -521,7 +520,7 @@ class Client {
      * @param token_id Token ID
      * @param cb 回调函数
      */
-    token(token_id, cb){
+    token(token_id, cb) {
         if (typeof token_id === 'undefined') {
             throw new Error('Token Id is required')
         }
