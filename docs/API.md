@@ -5,7 +5,7 @@ RealTimeCat Client
 **Kind**: global class  
 
 * [Client](#Client)
-    * [new Client(apiKey, apiSecret)](#new_Client_new)
+    * [new Client(apiKey, apiSecret, apiUrl)](#new_Client_new)
     * [.info(cb)](#Client+info)
     * [.createSession(label, data, live_days, type, persistent, cb)](#Client+createSession)
     * [.sessions(cb)](#Client+sessions)
@@ -23,14 +23,15 @@ RealTimeCat Client
     * [.delToken(token_id, cb)](#Client+delToken)
 
 <a name="new_Client_new"></a>
-### new Client(apiKey, apiSecret)
+### new Client(apiKey, apiSecret, apiUrl)
 Constructor
 
 
-| Param |
-| --- |
-| apiKey | 
-| apiSecret | 
+| Param | Description |
+| --- | --- |
+| apiKey | 实时猫API Key |
+| apiSecret | 实时猫API Secret |
+| apiUrl | 后端接口地址,形如https://api.realtimecat.com:443 |
 
 <a name="Client+info"></a>
 ### client.info(cb)

@@ -24,7 +24,7 @@ var Client = function () {
         var apiKey = _ref.apiKey;
         var apiSecret = _ref.apiSecret;
         var _ref$apiUrl = _ref.apiUrl;
-        var apiUrl = _ref$apiUrl === undefined ? 'http://127.0.0.1:8000' : _ref$apiUrl;
+        var apiUrl = _ref$apiUrl === undefined ? 'https://api.realtimecat.com:443' : _ref$apiUrl;
 
         _classCallCheck(this, Client);
 

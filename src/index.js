@@ -9,10 +9,11 @@ class Client {
 
     /**
      * Constructor
-     * @param apiKey
-     * @param apiSecret
+     * @param apiKey 实时猫API Key
+     * @param apiSecret 实时猫API Secret
+     * @param apiUrl 后端接口地址,形如https://api.realtimecat.com:443
      */
-    constructor({apiKey, apiSecret, apiUrl='http://127.0.0.1:8000'}={}) {
+    constructor({apiKey, apiSecret, apiUrl='https://api.realtimecat.com:443'}={}) {
         if (typeof apiKey === 'undefined') {
             throw new Error('API Key 不能为空')
         }

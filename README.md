@@ -16,12 +16,19 @@ var RealTimeCat = require('realtimecat-node-sdk');
 
 var apiKey = "";
 var apiSecret = "";
-var realtimecat = new RealTimeCat(apiKey, apiSecret);
+var apiUrl = "";
+var realtimecat = new RealTimeCat({apiKey:apiKey, apiSecret:apiSecret, apiUrl: apiUrl});
 ```
 
 ### API
 
 请阅读API[文档](docs/API.md)
+
+### 测试
+
+`npm install -g mocha`
+
+clone项目至本地,运行`npm install`安装依赖, 运行`npm test`进行测试
 
 ## 0.1.0
 

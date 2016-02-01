@@ -6,7 +6,7 @@ var apiKey = 'd8cf2c2c-fac7-4b5a-a1be-9a9665ba908c';
 var apiSecret = '99ca8fad-fd1f-499e-8849-3d5086735e93';
 var sessionId;
 
-var client = new Client({apiKey: apiKey, apiSecret: apiSecret});
+var client = new Client({apiKey: apiKey, apiSecret: apiSecret, apiUrl:'https://api.realtimecat.com:443'});
 
 describe('Client', function () {
 
