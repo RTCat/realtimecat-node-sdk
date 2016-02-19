@@ -1,6 +1,6 @@
 {
   "name": "realtimecat-node-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "RealTimeCat Server SDK for Node.js",
   "main": "index.js",
   "scripts": {
@@ -28,5 +28,13 @@
     "presets": [
       "es2015"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RTCat/realtimecat-node-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RTCat/realtimecat-node-sdk/issues"
+  },
+  "homepage": "https://github.com/RTCat/realtimecat-node-sdk#readme"
 }
