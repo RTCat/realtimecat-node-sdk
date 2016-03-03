@@ -7,19 +7,19 @@ RealTimeCat Client
 * [Client](#Client)
     * [new Client(apiKey, apiSecret, apiUrl)](#new_Client_new)
     * [.info(cb)](#Client+info)
-    * [.createSession(label, data, live_days, type, persistent, cb)](#Client+createSession)
+    * [.createSession(label, data, live_days, type, permanent, cb)](#Client+createSession)
     * [.sessions(cb)](#Client+sessions)
     * [.permanentSessions(cb)](#Client+permanentSessions)
     * [.temporarySessions(cb)](#Client+temporarySessions)
     * [.session(session_id, cb)](#Client+session)
-    * [.updateSession(session_id, label, persistent, data, live_days, cb)](#Client+updateSession)
+    * [.updateSession(session_id, label, permanent, data, live_days, cb)](#Client+updateSession)
     * [.delSession(session_id, cb)](#Client+delSession)
-    * [.createToken(session_id, label, data, live_days, type, persistent, cb)](#Client+createToken)
+    * [.createToken(session_id, label, data, live_days, type, permanent, number, cb)](#Client+createToken)
     * [.tokens(session_id, cb)](#Client+tokens)
     * [.permanentTokens(session_id, cb)](#Client+permanentTokens)
     * [.temporaryTokens(session_id, cb)](#Client+temporaryTokens)
     * [.token(token_id, cb)](#Client+token)
-    * [.updateToken(token_id, label, persistent, data, live_days, cb)](#Client+updateToken)
+    * [.updateToken(token_id, label, permanent, data, live_days, cb)](#Client+updateToken)
     * [.delToken(token_id, cb)](#Client+delToken)
 
 <a name="new_Client_new"></a>
@@ -44,7 +44,7 @@ Get API Basic Info 获取本 API 基本信息
 | cb | 回调函数 |
 
 <a name="Client+createSession"></a>
-### client.createSession(label, data, live_days, type, persistent, cb)
+### client.createSession(label, data, live_days, type, permanent, cb)
 Create a Session 新建Session
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
@@ -55,7 +55,7 @@ Create a Session 新建Session
 | data | 开发者自定义数据,长度1024 |
 | live_days | 存活时间 |
 | type | 类型,仅可以为p2p或rel |
-| persistent | true/false, 为true时Session永不过期 |
+| permanent | true/false, 为true时Session永不过期 |
 | cb | 回调函数 |
 
 <a name="Client+sessions"></a>
@@ -100,7 +100,7 @@ Get a Specific Session 获取单个Session
 | cb | 回调函数 |
 
 <a name="Client+updateSession"></a>
-### client.updateSession(session_id, label, persistent, data, live_days, cb)
+### client.updateSession(session_id, label, permanent, data, live_days, cb)
 Update a Session 修改单个Session
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
@@ -109,7 +109,7 @@ Update a Session 修改单个Session
 | --- | --- |
 | session_id | Session ID |
 | label | 可选，供开发者区分Session,长度255 |
-| persistent | true/false, 为true时Session永不过期 |
+| permanent | true/false, 为true时Session永不过期 |
 | data | 开发者自定义数据,长度1024 |
 | live_days | 存活时间 |
 | cb | 回调函数 |
@@ -126,7 +126,7 @@ Delete a Session 删除单个Session
 | cb | 回调函数 |
 
 <a name="Client+createToken"></a>
-### client.createToken(session_id, label, data, live_days, type, persistent, cb)
+### client.createToken(session_id, label, data, live_days, type, permanent, number, cb)
 Create a Token Under a Session 创建Session ID下的Token
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
@@ -138,7 +138,8 @@ Create a Token Under a Session 创建Session ID下的Token
 | data | 开发者自定义数据,长度1024 |
 | live_days | 存活时间 |
 | type | 类型,仅可以为pub或sub |
-| persistent | true/false,为true时Token永不过期 |
+| permanent | true/false,为true时Token永不过期 |
+| number | 创建个数 |
 | cb | 回调函数 |
 
 <a name="Client+tokens"></a>
@@ -186,7 +187,7 @@ Get a Token 获取单个Token
 | cb | 回调函数 |
 
 <a name="Client+updateToken"></a>
-### client.updateToken(token_id, label, persistent, data, live_days, cb)
+### client.updateToken(token_id, label, permanent, data, live_days, cb)
 Update a Token 修改单个Token
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
@@ -195,7 +196,7 @@ Update a Token 修改单个Token
 | --- | --- |
 | token_id | Token ID |
 | label | 可选，供开发者区分Token,长度255 |
-| persistent | 为true时Token永不过期 |
+| permanent | 为true时Token永不过期 |
 | data | 开发者自定义数据,长度1024 |
 | live_days | 存活时间 |
 | cb | 回调函数 |

@@ -14,8 +14,9 @@ var Client = function () {
 
     /**
      * Constructor
-     * @param apiKey
-     * @param apiSecret
+     * @param apiKey 实时猫API Key
+     * @param apiSecret 实时猫API Secret
+     * @param apiUrl 后端接口地址,形如https://api.realtimecat.com:443
      */
 
     function Client() {
@@ -33,26 +34,26 @@ var Client = function () {
         } else if (typeof apiSecret === 'undefined') {
             throw new Error('API Secret 不能为空');
         }
-        this.version = '0.2.0';
+        this.version = '0.3.0';
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.apiUrl = apiUrl;
         this.endpoints = {
-            info: '/v0.2/',
-            sessions: '/v0.2/sessions',
-            permanentSessions: '/v0.2/sessions/persistent',
-            temporarySessions: '/v0.2/sessions/nonpersistent',
-            session: '/v0.2/session/',
-            tokens: '/v0.2/sessions/{session_id}/tokens',
-            permanentTokens: '/v0.2/sessions/{session_id}/tokens/persistent',
-            temporaryTokens: '/v0.2/sessions/{session_id}/tokens/nonpersistent',
-            token: '/v0.2/token/',
-            records: '/v0.2/records',
-            record: '/v0.2/record/',
-            sessionslogs: '/v0.2/logs/sessions',
-            tokenslogs: '/v0.2/logs/tokens',
-            tokenlogs: '/v0.2/logs/session/',
-            configurations: '/v0.2/configurations'
+            info: '/v0.3/',
+            sessions: '/v0.3/sessions',
+            permanentSessions: '/v0.3/sessions/permanent',
+            temporarySessions: '/v0.3/sessions/nonpermanent',
+            session: '/v0.3/sessions/',
+            tokens: '/v0.3/sessions/{session_id}/tokens',
+            permanentTokens: '/v0.3/sessions/{session_id}/tokens/permanent',
+            temporaryTokens: '/v0.3/sessions/{session_id}/tokens/nonpermanent',
+            token: '/v0.3/tokens/',
+            records: '/v0.3/records',
+            record: '/v0.3/records/',
+            sessionslogs: '/v0.3/logs/sessions',
+            tokenslogs: '/v0.3/logs/tokens',
+            tokenlogs: '/v0.3/logs/sessions/',
+            configurations: '/v0.3/configurations'
         };
     }
 
@@ -68,10 +69,6 @@ var Client = function () {
                 url: this.apiUrl + this.endpoints.info
             }, function (err, resp, body) {
                 if (err) return cb(new Error('请求失败: ' + err));
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('服务器内部错误: (' + resp.statusCode + ') ' + body));
-                }
                 var response = JSON.parse(body);
                 return cb(null, response);
             });
@@ -83,7 +80,7 @@ var Client = function () {
          * @param data 开发者自定义数据,长度1024
          * @param live_days 存活时间
          * @param type 类型,仅可以为p2p或rel
-         * @param persistent true/false, 为true时Session永不过期
+         * @param permanent true/false, 为true时Session永不过期
          * @param cb 回调函数
          */
 
@@ -97,8 +94,8 @@ var Client = function () {
             var live_days = _ref2.live_days;
             var _ref2$type = _ref2.type;
             var type = _ref2$type === undefined ? 'p2p' : _ref2$type;
-            var _ref2$persistent = _ref2.persistent;
-            var persistent = _ref2$persistent === undefined ? false : _ref2$persistent;
+            var _ref2$permanent = _ref2.permanent;
+            var permanent = _ref2$permanent === undefined ? false : _ref2$permanent;
             var cb = arguments[1];
 
             var opts = {
@@ -106,7 +103,7 @@ var Client = function () {
                 data: data,
                 live_days: live_days,
                 type: type,
-                persistent: persistent
+                permanent: permanent
             };
             request.post({
                 url: this.apiUrl + this.endpoints.sessions,
@@ -116,17 +113,8 @@ var Client = function () {
                     'X-RTCAT-SECRET': this.apiSecret
                 }
             }, function (err, resp, body) {
+
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -154,17 +142,8 @@ var Client = function () {
                     'X-RTCAT-SECRET': this.apiSecret
                 }
             }, function (err, resp, body) {
+
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -192,17 +171,8 @@ var Client = function () {
                     'X-RTCAT-SECRET': this.apiSecret
                 }
             }, function (err, resp, body) {
+
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -230,17 +200,8 @@ var Client = function () {
                     'X-RTCAT-SECRET': this.apiSecret
                 }
             }, function (err, resp, body) {
+
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -274,16 +235,6 @@ var Client = function () {
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
 
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
                 var response = JSON.parse(body);
 
                 // handle response errors
@@ -299,7 +250,7 @@ var Client = function () {
          * Update a Session 修改单个Session
          * @param session_id Session ID
          * @param label 可选，供开发者区分Session,长度255
-         * @param persistent true/false, 为true时Session永不过期
+         * @param permanent true/false, 为true时Session永不过期
          * @param data 开发者自定义数据,长度1024
          * @param live_days 存活时间
          * @param cb 回调函数
@@ -312,7 +263,7 @@ var Client = function () {
 
             var session_id = _ref3.session_id;
             var label = _ref3.label;
-            var persistent = _ref3.persistent;
+            var permanent = _ref3.permanent;
             var data = _ref3.data;
             var live_days = _ref3.live_days;
             var cb = arguments[1];
@@ -323,7 +274,7 @@ var Client = function () {
             var opts = {
                 session_id: session_id,
                 label: label,
-                persistent: persistent,
+                permanent: permanent,
                 data: data,
                 live_days: live_days
             };
@@ -336,16 +287,6 @@ var Client = function () {
                 }
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -377,17 +318,8 @@ var Client = function () {
                     'X-RTCAT-SECRET': this.apiSecret
                 }
             }, function (err, resp, body) {
+
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 if (body) {
                     var response = JSON.parse(body);
@@ -408,7 +340,8 @@ var Client = function () {
          * @param data 开发者自定义数据,长度1024
          * @param live_days 存活时间
          * @param type 类型,仅可以为pub或sub
-         * @param persistent true/false,为true时Token永不过期
+         * @param permanent true/false,为true时Token永不过期
+         * @param number 创建个数
          * @param cb 回调函数
          */
 
@@ -423,8 +356,10 @@ var Client = function () {
             var live_days = _ref4.live_days;
             var _ref4$type = _ref4.type;
             var type = _ref4$type === undefined ? 'pub' : _ref4$type;
-            var _ref4$persistent = _ref4.persistent;
-            var persistent = _ref4$persistent === undefined ? false : _ref4$persistent;
+            var _ref4$permanent = _ref4.permanent;
+            var permanent = _ref4$permanent === undefined ? false : _ref4$permanent;
+            var _ref4$number = _ref4.number;
+            var number = _ref4$number === undefined ? 1 : _ref4$number;
             var cb = arguments[1];
 
             if (typeof session_id === 'undefined') {
@@ -436,7 +371,8 @@ var Client = function () {
                 data: data,
                 live_days: live_days,
                 type: type,
-                persistent: persistent
+                permanent: permanent,
+                number: number
             };
             request.post({
                 url: this.apiUrl + this.endpoints.tokens.replace('{session_id}', session_id),
@@ -447,16 +383,6 @@ var Client = function () {
                 }
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -490,16 +416,6 @@ var Client = function () {
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
 
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
                 var response = JSON.parse(body);
 
                 // handle response errors
@@ -531,16 +447,6 @@ var Client = function () {
                 }
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -574,16 +480,6 @@ var Client = function () {
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
 
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
                 var response = JSON.parse(body);
 
                 // handle response errors
@@ -616,16 +512,6 @@ var Client = function () {
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
 
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
                 var response = JSON.parse(body);
 
                 // handle response errors
@@ -641,7 +527,7 @@ var Client = function () {
          * Update a Token 修改单个Token
          * @param token_id Token ID
          * @param label 可选，供开发者区分Token,长度255
-         * @param persistent 为true时Token永不过期
+         * @param permanent 为true时Token永不过期
          * @param data 开发者自定义数据,长度1024
          * @param live_days 存活时间
          * @param cb 回调函数
@@ -654,7 +540,7 @@ var Client = function () {
 
             var token_id = _ref5.token_id;
             var label = _ref5.label;
-            var persistent = _ref5.persistent;
+            var permanent = _ref5.permanent;
             var data = _ref5.data;
             var live_days = _ref5.live_days;
             var cb = arguments[1];
@@ -665,7 +551,7 @@ var Client = function () {
             var opts = {
                 token_id: token_id,
                 label: label,
-                persistent: persistent,
+                permanent: permanent,
                 data: data,
                 live_days: live_days
             };
@@ -678,16 +564,6 @@ var Client = function () {
                 }
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 var response = JSON.parse(body);
 
@@ -720,16 +596,6 @@ var Client = function () {
                 }
             }, function (err, resp, body) {
                 if (err) return cb(new Error('The request failed: ' + err));
-
-                // handle client errors
-                if (resp.statusCode === 403) {
-                    return cb(new Error('An authentication error occurred: (' + resp.statusCode + ') ' + body));
-                }
-
-                // handle server errors
-                if (resp.statusCode >= 500 && resp.statusCode <= 599) {
-                    return cb(new Error('A server error occurred: (' + resp.statusCode + ') ' + body));
-                }
 
                 if (body) {
                     var response = JSON.parse(body);

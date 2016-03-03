@@ -1,9 +1,9 @@
 # realtimecat-node-sdk
 实时猫 NodeJS Server SDK | RealTimeCat Server SDK for Node.js
 
-## 0.2.0
+## 0.3.*
 
-0.2.0版SDK配合0.2版实时猫接口使用
+0.3版SDK配合0.3版实时猫接口使用
 
 ### Install
 
@@ -28,7 +28,16 @@ var realtimecat = new RealTimeCat({apiKey:apiKey, apiSecret:apiSecret, apiUrl: a
 
 `npm install -g mocha`
 
-clone项目至本地,运行`npm install`安装依赖, 运行`npm test`进行测试
+clone项目至本地,运行`npm install`安装依赖, 复制`config.sample.js`重命名为`config.js`,
+添加`api key`和`secret`, 运行`npm test`进行测试
+
+## 0.2.*
+
+0.2版SDK配合0.2版实时猫接口使用, 建议使用最新的0.3版实时猫接口
+
+### Install
+
+`npm install realtimecat-node-sdk@">=0.2.0 <0.3.0" --save`
 
 ## 0.1.0
 

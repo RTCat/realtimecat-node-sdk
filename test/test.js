@@ -2,11 +2,12 @@
 
 var assert = require('assert');
 var Client = require('../index');
-var apiKey = 'd8cf2c2c-fac7-4b5a-a1be-9a9665ba908c';
-var apiSecret = '99ca8fad-fd1f-499e-8849-3d5086735e93';
-var sessionId;
+var conf = require('./config');
+var apiKey = conf.apiKey;
+var apiSecret = conf.apiSecret;
+var sessionId = conf.sessionId;
 
-var client = new Client({apiKey: apiKey, apiSecret: apiSecret, apiUrl:'https://api.realtimecat.com:443'});
+var client = new Client({apiKey: apiKey, apiSecret: apiSecret, apiUrl: 'https://api.realtimecat.com:443'});
 
 describe('Client', function () {
 
@@ -25,10 +26,10 @@ describe('Client', function () {
             client.info(function (err, resp) {
                 if (err) throw err;
                 assert.deepEqual({
-                    message: '实时猫 RealTimeCat Server API version 0.2, copyright RealTimeCat.com',
+                    message: '实时猫 RealTimeCat Server API version 0.3, copyright RealTimeCat.com',
                     support_email: 'info@learning-tech.com',
                     documentation_url: 'http://shishimao.com/docs',
-                    version: '0.2',
+                    version: '0.3',
                     copyright: '北京乐塔克科技有限公司',
                     tel: '4006406411',
                     website_url: 'http://shishimao.com'
@@ -57,7 +58,6 @@ describe('Sessions', function () {
             client.sessions(function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -68,7 +68,6 @@ describe('Sessions', function () {
             client.permanentSessions(function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -79,7 +78,6 @@ describe('Sessions', function () {
             client.temporarySessions(function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -90,7 +88,6 @@ describe('Sessions', function () {
             client.session(sessionId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -100,11 +97,10 @@ describe('Sessions', function () {
         it('should update the session', function (done) {
             client.updateSession({
                 session_id: sessionId,
-                label: 'test222'
+                label: 'love is blind'
             }, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -115,7 +111,6 @@ describe('Sessions', function () {
             client.delSession(sessionId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
-                //assert.deepEqual({ count: 0, next: null, previous: null, results: [] }, resp);
                 done();
             })
         })
@@ -125,8 +120,8 @@ describe('Sessions', function () {
 describe('Tokens', function () {
 
     describe('create token', function () {
-        it('should create a token', function (done) {
-            client.createToken({session_id: '20d4f632-b3b1-40f6-a546-2ec19208e321'}, function (err, resp) {
+        it('should create two tokens', function (done) {
+            client.createToken({session_id: sessionId, number: 2}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -136,7 +131,7 @@ describe('Tokens', function () {
 
     describe('tokens', function () {
         it('should return tokens', function (done) {
-            client.tokens('20d4f632-b3b1-40f6-a546-2ec19208e321', function (err, resp) {
+            client.tokens(sessionId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -146,7 +141,7 @@ describe('Tokens', function () {
 
     describe('permanent tokens', function () {
         it('should return permanent tokens', function (done) {
-            client.permanentTokens('20d4f632-b3b1-40f6-a546-2ec19208e321', function (err, resp) {
+            client.permanentTokens(sessionId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -156,7 +151,7 @@ describe('Tokens', function () {
 
     describe('temporary tokens', function () {
         it('should return temporary tokens', function (done) {
-            client.temporaryTokens('20d4f632-b3b1-40f6-a546-2ec19208e321', function (err, resp) {
+            client.temporaryTokens(sessionId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -166,7 +161,7 @@ describe('Tokens', function () {
 
     describe('token', function () {
         it('should return a token', function (done) {
-            client.token('8904c2be-59ae-4363-8bf9-b7d1d3e0467e', function (err, resp) {
+            client.token('4df07516-fa7c-40ac-9479-f48a54e1d12b', function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -177,8 +172,8 @@ describe('Tokens', function () {
     describe('update token', function () {
         it('should update the token', function (done) {
             client.updateToken({
-                token_id: '8904c2be-59ae-4363-8bf9-b7d1d3e0467e',
-                label: 'test222'
+                token_id: '4df07516-fa7c-40ac-9479-f48a54e1d12b',
+                label: 'love is blind'
             }, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
@@ -189,7 +184,7 @@ describe('Tokens', function () {
 
     describe('del token', function () {
         it('should delete the token', function (done) {
-            client.delToken("8904c2be-59ae-4363-8bf9-b7d1d3e0467e", function (err, resp) {
+            client.delToken("4df07516-fa7c-40ac-9479-f48a54e1d12b", function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
