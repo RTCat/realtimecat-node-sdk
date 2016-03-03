@@ -1,6 +1,6 @@
 {
   "name": "realtimecat-node-sdk",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "RealTimeCat Server SDK for Node.js",
   "main": "index.js",
   "scripts": {
