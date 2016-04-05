@@ -8,14 +8,14 @@ RealTimeCat Client
     * [new Client(apiKey, apiSecret, apiUrl)](#new_Client_new)
     * [.info(cb)](#Client+info)
     * [.createSession(label, data, live_days, type, permanent, cb)](#Client+createSession)
-    * [.sessions(cb)](#Client+sessions)
+    * [.sessions(opts, cb)](#Client+sessions)
     * [.permanentSessions(cb)](#Client+permanentSessions)
     * [.temporarySessions(cb)](#Client+temporarySessions)
     * [.session(session_id, cb)](#Client+session)
     * [.updateSession(session_id, label, permanent, data, live_days, cb)](#Client+updateSession)
     * [.delSession(session_id, cb)](#Client+delSession)
     * [.createToken(session_id, label, data, live_days, type, permanent, number, cb)](#Client+createToken)
-    * [.tokens(session_id, cb)](#Client+tokens)
+    * [.tokens(opts, cb)](#Client+tokens)
     * [.permanentTokens(session_id, cb)](#Client+permanentTokens)
     * [.temporaryTokens(session_id, cb)](#Client+temporaryTokens)
     * [.token(token_id, cb)](#Client+token)
@@ -59,13 +59,16 @@ Create a Session 新建Session
 | cb | 回调函数 |
 
 <a name="Client+sessions"></a>
-### client.sessions(cb)
+### client.sessions(opts, cb)
 Query Sessions 获取Session列表
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
 
 | Param | Description |
 | --- | --- |
+| opts |  |
+| opts.page | 获取第几页 |
+| opts.page_size | 按每页多少条目分页 |
 | cb | 回调函数 |
 
 <a name="Client+permanentSessions"></a>
@@ -76,7 +79,7 @@ Query Permanent Sessions 获取永久Session列表
 
 | Param | Description |
 | --- | --- |
-| cb | 回调函数 |
+| cb | 回调函数 TODO: 增加page和page_size参数 |
 
 <a name="Client+temporarySessions"></a>
 ### client.temporarySessions(cb)
@@ -86,7 +89,7 @@ Query Temporary Sessions 获取临时Session列表
 
 | Param | Description |
 | --- | --- |
-| cb | 回调函数 |
+| cb | 回调函数 TODO: 增加page和page_size参数 |
 
 <a name="Client+session"></a>
 ### client.session(session_id, cb)
@@ -143,14 +146,17 @@ Create a Token Under a Session 创建Session ID下的Token
 | cb | 回调函数 |
 
 <a name="Client+tokens"></a>
-### client.tokens(session_id, cb)
+### client.tokens(opts, cb)
 Query Tokens Under a Session 获取Session ID下的所有Token列表
 
 **Kind**: instance method of <code>[Client](#Client)</code>  
 
 | Param | Description |
 | --- | --- |
-| session_id | Session ID |
+| opts |  |
+| opts.session_id | Session ID |
+| opts.page | 获取第几页tokens |
+| opts.page_size | 按每页多少条目分页 |
 | cb | 回调函数 |
 
 <a name="Client+permanentTokens"></a>
@@ -162,7 +168,7 @@ Query Permanent Tokens 获取永久Token列表
 | Param | Description |
 | --- | --- |
 | session_id | Session ID |
-| cb | 回调函数 |
+| cb | 回调函数 TODO: 增加page和page_size参数 |
 
 <a name="Client+temporaryTokens"></a>
 ### client.temporaryTokens(session_id, cb)
@@ -173,7 +179,7 @@ Query Temporary Tokens 获取临时Token列表
 | Param | Description |
 | --- | --- |
 | session_id | Session ID |
-| cb | 回调函数 |
+| cb | 回调函数 TODO: 增加page和page_size参数 |
 
 <a name="Client+token"></a>
 ### client.token(token_id, cb)

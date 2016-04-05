@@ -55,7 +55,7 @@ describe('Sessions', function () {
 
     describe('sessions', function () {
         it('should return all sessions', function (done) {
-            client.sessions(function (err, resp) {
+            client.sessions({page:1, page_size:30},function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
@@ -131,7 +131,7 @@ describe('Tokens', function () {
 
     describe('tokens', function () {
         it('should return tokens', function (done) {
-            client.tokens(sessionId, function (err, resp) {
+            client.tokens({session_id:sessionId, page:2, page_size:20}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();

@@ -66,7 +66,7 @@ class Client {
      * @param permanent true/false, 为true时Session永不过期
      * @param cb 回调函数
      */
-    createSession({label, data, live_days,type='p2p', permanent=false}={}, cb) {
+    createSession({label, data, live_days, type='p2p', permanent=false}={}, cb) {
         let opts = {
             label: label,
             data: data,
@@ -99,11 +99,28 @@ class Client {
 
     /**
      * Query Sessions 获取Session列表
+     * @param opts
+     * @param opts.page 获取第几页
+     * @param opts.page_size 按每页多少条目分页
      * @param cb 回调函数
      */
-    sessions(cb) {
+    sessions(opts, cb) {
+        let url = this.apiUrl + this.endpoints.sessions;
+        if (typeof opts === 'function') {
+            cb = opts;
+            opts = {};
+        }
+        if (opts.page && opts.page_size) {
+            url += '?page=' + opts.page + '&page_size=' + opts.page_size;
+        }
+        else if (opts.page_size) {
+            url += '?page_size=' + opts.page_size;
+        }
+        else if (opts.page) {
+            url += '?page=' + opts.page
+        }
         request({
-            url: this.apiUrl + this.endpoints.sessions,
+            url: url,
             headers: {
                 'X-RTCAT-APIKEY': this.apiKey,
                 'X-RTCAT-SECRET': this.apiSecret
@@ -126,6 +143,7 @@ class Client {
     /**
      * Query Permanent Sessions 获取永久Session列表
      * @param cb 回调函数
+     * TODO: 增加page和page_size参数
      */
     permanentSessions(cb) {
         request({
@@ -152,6 +170,7 @@ class Client {
     /**
      * Query Temporary Sessions 获取临时Session列表
      * @param cb 回调函数
+     * TODO: 增加page和page_size参数
      */
     temporarySessions(cb) {
         request({
@@ -287,7 +306,7 @@ class Client {
      * @param number 创建个数
      * @param cb 回调函数
      */
-    createToken({session_id,label,data,live_days, type='pub',permanent=false, number=1}={}, cb) {
+    createToken({session_id, label, data, live_days, type='pub', permanent=false, number=1}={}, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
@@ -324,15 +343,28 @@ class Client {
 
     /**
      * Query Tokens Under a Session 获取Session ID下的所有Token列表
-     * @param session_id Session ID
+     * @param opts
+     * @param opts.session_id Session ID
+     * @param opts.page 获取第几页tokens
+     * @param opts.page_size 按每页多少条目分页
      * @param cb 回调函数
      */
-    tokens(session_id, cb) {
-        if (typeof session_id === 'undefined') {
+    tokens(opts, cb) {
+        if (!opts.session_id) {
             throw new Error('Session Id is required');
         }
+        let url = this.apiUrl + this.endpoints.tokens.replace('{session_id}', opts.session_id);
+        if (opts.page && opts.page_size) {
+            url += '?page=' + opts.page + '&page_size=' + opts.page_size;
+        }
+        else if (opts.page_size) {
+            url += '?page_size=' + opts.page_size;
+        }
+        else if (opts.page) {
+            url += '?page=' + opts.page
+        }
         request({
-            url: this.apiUrl + this.endpoints.tokens.replace('{session_id}', session_id),
+            url: url,
             headers: {
                 'X-RTCAT-APIKEY': this.apiKey,
                 'X-RTCAT-SECRET': this.apiSecret
@@ -355,6 +387,7 @@ class Client {
      * Query Permanent Tokens 获取永久Token列表
      * @param session_id Session ID
      * @param cb 回调函数
+     * TODO: 增加page和page_size参数
      */
     permanentTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
@@ -384,6 +417,7 @@ class Client {
      * Query Temporary Tokens 获取临时Token列表
      * @param session_id Session ID
      * @param cb 回调函数
+     * TODO: 增加page和page_size参数
      */
     temporaryTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
