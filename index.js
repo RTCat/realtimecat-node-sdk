@@ -10,7 +10,7 @@ var request = require('request');
  * RealTimeCat Client
  */
 
-var Client = function () {
+var RealTimeCat = function () {
 
     /**
      * Constructor
@@ -19,7 +19,7 @@ var Client = function () {
      * @param apiUrl 后端接口地址,形如https://api.realtimecat.com:443
      */
 
-    function Client() {
+    function RealTimeCat() {
         var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var apiKey = _ref.apiKey;
@@ -27,33 +27,33 @@ var Client = function () {
         var _ref$apiUrl = _ref.apiUrl;
         var apiUrl = _ref$apiUrl === undefined ? 'https://api.realtimecat.com:443' : _ref$apiUrl;
 
-        _classCallCheck(this, Client);
+        _classCallCheck(this, RealTimeCat);
 
         if (typeof apiKey === 'undefined') {
             throw new Error('API Key 不能为空');
         } else if (typeof apiSecret === 'undefined') {
             throw new Error('API Secret 不能为空');
         }
-        this.version = '0.3.0';
+        this.version = 'v0.4';
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.apiUrl = apiUrl;
         this.endpoints = {
-            info: '/v0.3/',
-            sessions: '/v0.3/sessions',
-            permanentSessions: '/v0.3/sessions/permanent',
-            temporarySessions: '/v0.3/sessions/nonpermanent',
-            session: '/v0.3/sessions/',
-            tokens: '/v0.3/sessions/{session_id}/tokens',
-            permanentTokens: '/v0.3/sessions/{session_id}/tokens/permanent',
-            temporaryTokens: '/v0.3/sessions/{session_id}/tokens/nonpermanent',
-            token: '/v0.3/tokens/',
-            records: '/v0.3/records',
-            record: '/v0.3/records/',
-            sessionslogs: '/v0.3/logs/sessions',
-            tokenslogs: '/v0.3/logs/tokens',
-            tokenlogs: '/v0.3/logs/sessions/',
-            configurations: '/v0.3/configurations'
+            info: '/' + this.version + '/',
+            sessions: '/' + this.version + '/sessions',
+            permanentSessions: '/' + this.version + '/sessions/permanent',
+            temporarySessions: '/' + this.version + '/sessions/nonpermanent',
+            session: '/' + this.version + '/sessions/',
+            tokens: '/' + this.version + '/sessions/{session_id}/tokens',
+            permanentTokens: '/' + this.version + '/sessions/{session_id}/tokens/permanent',
+            temporaryTokens: '/' + this.version + '/sessions/{session_id}/tokens/nonpermanent',
+            token: '/' + this.version + '/tokens/',
+            records: '/' + this.version + '/records',
+            record: '/' + this.version + '/records/',
+            sessionslogs: '/' + this.version + '/logs/sessions',
+            tokenslogs: '/' + this.version + '/logs/tokens',
+            tokenlogs: '/' + this.version + '/logs/sessions/',
+            configurations: '/' + this.version + '/configurations'
         };
     }
 
@@ -62,7 +62,7 @@ var Client = function () {
      * @param cb 回调函数
      */
 
-    _createClass(Client, [{
+    _createClass(RealTimeCat, [{
         key: 'info',
         value: function info(cb) {
             request({
@@ -640,8 +640,8 @@ var Client = function () {
         }
     }]);
 
-    return Client;
+    return RealTimeCat;
 }();
 
-module.exports = Client;
+module.exports = RealTimeCat;
 //# sourceMappingURL=index.js.map
