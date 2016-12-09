@@ -3,5 +3,6 @@
 module.exports = {
     apiKey: '',
     apiSecret: '',
-    sessionId: ''
+    sessionId: '',
+    tokenId: ''
 };

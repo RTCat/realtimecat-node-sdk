@@ -6,60 +6,53 @@ var conf = require('./config');
 var apiKey = conf.apiKey;
 var apiSecret = conf.apiSecret;
 var sessionId = conf.sessionId;
+var tokenId = conf.tokenId;
 
 var client = new Client({apiKey: apiKey, apiSecret: apiSecret, apiUrl: 'https://api.realtimecat.com:443'});
-
-describe('Client', function () {
-
-    describe('constructor', function () {
-        it('should return err', function () {
-            try {
-                var client1 = new Client();
-            } catch (e) {
-                console.log(e)
-            }
-        })
-    });
-
-    describe('info', function () {
-        it('should return api info', function (done) {
-            client.info(function (err, resp) {
-                if (err) throw err;
-                assert.deepEqual({
-                    message: '实时猫 RealTimeCat Server API version 0.3, copyright RealTimeCat.com',
-                    support_email: 'info@learning-tech.com',
-                    documentation_url: 'http://shishimao.com/docs',
-                    version: '0.3',
-                    copyright: '北京乐塔克科技有限公司',
-                    tel: '4006406411',
-                    website_url: 'http://shishimao.com'
-                }, resp);
-                done();
-            });
-        });
-    });
-
-});
 
 describe('Sessions', function () {
     describe('create sessions', function () {
         it('should create a session', function (done) {
-            client.createSession({label: 'test'}, function (err, resp) {
+            client.createSession({label: 'cb'}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 sessionId = resp.uuid;
                 done();
             })
-        })
+        });
+        it('should create a session async', function (done) {
+            client.createSession({label: 'promise'})
+                .then(function (resp) {
+                    console.log(resp);
+                    sessionId = resp.uuid;
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
+        });
+
     });
 
     describe('sessions', function () {
         it('should return all sessions', function (done) {
-            client.sessions({page:1, page_size:30},function (err, resp) {
+            client.sessions({page: 1, page_size: 30}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
             })
+        });
+        it('should return all sessions async', function (done) {
+            client.sessions({page: 1, page_size: 30})
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
@@ -70,6 +63,17 @@ describe('Sessions', function () {
                 console.log(resp);
                 done();
             })
+        });
+        it('should return permanent sessions async', function (done) {
+            client.permanentSessions()
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
@@ -80,6 +84,17 @@ describe('Sessions', function () {
                 console.log(resp);
                 done();
             })
+        });
+        it('should return temporary sessions async', function (done) {
+            client.temporarySessions()
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
@@ -90,6 +105,17 @@ describe('Sessions', function () {
                 console.log(resp);
                 done();
             })
+        })
+        it('should return a session async', function (done) {
+            client.session(sessionId)
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
@@ -103,6 +129,18 @@ describe('Sessions', function () {
                 console.log(resp);
                 done();
             })
+        });
+        it('should update the session async', function (done) {
+            client.updateSession({
+                session_id: sessionId,
+                label: 'love is blind my ass'
+            }).then(function (resp) {
+                console.log(resp);
+                done();
+            }).catch((e) => {
+                console.log(e);
+                done();
+            })
         })
     });
 
@@ -113,7 +151,7 @@ describe('Sessions', function () {
                 console.log(resp);
                 done();
             })
-        })
+        });
     });
 });
 
@@ -127,15 +165,37 @@ describe('Tokens', function () {
                 done();
             })
         })
+        it('should create two tokens async', function (done) {
+            client.createToken({session_id: sessionId, number: 2})
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
+        })
     });
 
     describe('tokens', function () {
         it('should return tokens', function (done) {
-            client.tokens({session_id:sessionId, page:1, page_size:20}, function (err, resp) {
+            client.tokens({session_id: sessionId, page: 1, page_size: 20}, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
             })
+        })
+        it('should return tokens async', function (done) {
+            client.tokens({session_id: sessionId, page: 1, page_size: 20})
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
@@ -147,6 +207,17 @@ describe('Tokens', function () {
                 done();
             })
         })
+        it('should return permanent tokens async', function (done) {
+            client.permanentTokens(sessionId)
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
+        })
     });
 
     describe('temporary tokens', function () {
@@ -157,23 +228,57 @@ describe('Tokens', function () {
                 done();
             })
         })
+        it('should return temporary tokens async', function (done) {
+            client.temporaryTokens(sessionId)
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
+        })
     });
 
     describe('token', function () {
+
         it('should return a token', function (done) {
-            client.token('4df07516-fa7c-40ac-9479-f48a54e1d12b', function (err, resp) {
+            client.token(tokenId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();
             })
+        });
+
+        it('should return a token async', function (done) {
+            client.token(tokenId)
+                .then(function (resp) {
+                    console.log(resp);
+                    done();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    done();
+                })
         })
     });
 
     describe('update token', function () {
         it('should update the token', function (done) {
             client.updateToken({
-                token_id: '4df07516-fa7c-40ac-9479-f48a54e1d12b',
+                token_id: tokenId,
                 label: 'love is blind'
+            }, function (err, resp) {
+                if (err)throw err;
+                console.log(resp);
+                done();
+            })
+        });
+        it('should update the token async', function (done) {
+            client.updateToken({
+                token_id: tokenId,
+                label: 'love is blind my ass'
             }, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
@@ -184,7 +289,7 @@ describe('Tokens', function () {
 
     describe('del token', function () {
         it('should delete the token', function (done) {
-            client.delToken("4df07516-fa7c-40ac-9479-f48a54e1d12b", function (err, resp) {
+            client.delToken(tokenId, function (err, resp) {
                 if (err)throw err;
                 console.log(resp);
                 done();

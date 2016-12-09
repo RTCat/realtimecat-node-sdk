@@ -1,11 +1,12 @@
 {
   "name": "realtimecat-node-sdk",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "RealTimeCat Server SDK for Node.js",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "jsdoc": "jsdoc2md \"src/**/*.js\" > docs/API.md"
+    "jsdoc": "jsdoc2md \"src/**/*.js\" > docs/API.md",
+    "build":"npm run jsdoc && gulp babel"
   },
   "keywords": [
     "RealTimeCat",

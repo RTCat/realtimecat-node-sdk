@@ -13,48 +13,29 @@ class RealTimeCat {
      * @param apiSecret 实时猫API Secret
      * @param apiUrl 后端接口地址,形如https://api.realtimecat.com:443
      */
-    constructor({apiKey, apiSecret, apiUrl='https://api.realtimecat.com:443'}={}) {
+    constructor({apiKey, apiSecret, apiUrl = 'https://api.realtimecat.com:443'}={}) {
         if (typeof apiKey === 'undefined') {
             throw new Error('API Key 不能为空')
         }
         else if (typeof apiSecret === 'undefined') {
             throw new Error('API Secret 不能为空')
         }
-        this.version = 'v0.4';
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.apiUrl = apiUrl;
-        this.endpoints = {
-            info: `/${this.version}/`,
-            sessions: `/${this.version}/sessions`,
-            permanentSessions: `/${this.version}/sessions/permanent`,
-            temporarySessions: `/${this.version}/sessions/nonpermanent`,
-            session: `/${this.version}/sessions/`,
-            tokens: `/${this.version}/sessions/{session_id}/tokens`,
-            permanentTokens: `/${this.version}/sessions/{session_id}/tokens/permanent`,
-            temporaryTokens: `/${this.version}/sessions/{session_id}/tokens/nonpermanent`,
-            token: `/${this.version}/tokens/`,
-            records: `/${this.version}/records`,
-            record: `/${this.version}/records/`,
-            sessionslogs: `/${this.version}/logs/sessions`,
-            tokenslogs: `/${this.version}/logs/tokens`,
-            tokenlogs: `/${this.version}/logs/sessions/`,
-            configurations: `/${this.version}/configurations`
+        this._version = 'v0.4';
+        this._apiKey = apiKey;
+        this._apiSecret = apiSecret;
+        this._apiUrl = apiUrl;
+        this._endpoints = {
+            sessions: `/${this._version}/sessions`,
+            permanentSessions: `/${this._version}/sessions/permanent`,
+            temporarySessions: `/${this._version}/sessions/nonpermanent`,
+            session: `/${this._version}/sessions/`,
+            tokens: `/${this._version}/sessions/{session_id}/tokens`,
+            permanentTokens: `/${this._version}/sessions/{session_id}/tokens/permanent`,
+            temporaryTokens: `/${this._version}/sessions/{session_id}/tokens/nonpermanent`,
+            token: `/${this._version}/tokens/`,
+            records: `/${this._version}/records`,
+            record: `/${this._version}/records/`
         }
-    }
-
-    /**
-     * Get API Basic Info 获取本 API 基本信息
-     * @param cb 回调函数
-     */
-    info(cb) {
-        request({
-            url: this.apiUrl + this.endpoints.info
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('请求失败: ' + err));
-            let response = JSON.parse(body);
-            return cb(null, response);
-        })
     }
 
     /**
@@ -64,9 +45,10 @@ class RealTimeCat {
      * @param live_days 存活时间
      * @param type 类型,仅可以为p2p或rel
      * @param permanent true/false, 为true时Session永不过期
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
-    createSession({label, data, live_days, type='p2p', permanent=false}={}, cb) {
+    createSession({label, data, live_days, type = 'p2p', permanent = false}={}, cb) {
         let opts = {
             label: label,
             data: data,
@@ -74,27 +56,31 @@ class RealTimeCat {
             type: type,
             permanent: permanent
         };
-        request.post({
-            url: this.apiUrl + this.endpoints.sessions,
-            form: opts,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.post({
+                url: this._apiUrl + this._endpoints.sessions,
+                form: opts,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error);
+                } // handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
-
     }
 
     /**
@@ -102,14 +88,17 @@ class RealTimeCat {
      * @param opts
      * @param opts.page 获取第几页
      * @param opts.page_size 按每页多少条目分页
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
     sessions(opts, cb) {
-        let url = this.apiUrl + this.endpoints.sessions;
         if (typeof opts === 'function') {
             cb = opts;
             opts = {};
         }
+        cb = cb || function () {
+            };
+        let url = this._apiUrl + this._endpoints.sessions;
         if (opts.page && opts.page_size) {
             url += '?page=' + opts.page + '&page_size=' + opts.page_size;
         }
@@ -119,107 +108,129 @@ class RealTimeCat {
         else if (opts.page) {
             url += '?page=' + opts.page
         }
-        request({
-            url: url,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        return new Promise((resolve, reject) => {
+            request({
+                url: url,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error);
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Query Permanent Sessions 获取永久Session列表
-     * @param cb 回调函数
-     * TODO: 增加page和page_size参数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
+     * @todo: 增加page和page_size参数
      */
     permanentSessions(cb) {
-        request({
-            url: this.apiUrl + this.endpoints.permanentSessions,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {};
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.permanentSessions,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
+
     /**
      * Query Temporary Sessions 获取临时Session列表
-     * @param cb 回调函数
-     * TODO: 增加page和page_size参数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
+     * @todo: 增加page和page_size参数
      */
     temporarySessions(cb) {
-        request({
-            url: this.apiUrl + this.endpoints.temporarySessions,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.temporarySessions,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Get a Specific Session 获取单个Session
      * @param session_id Session ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
     session(session_id, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        request({
-            url: this.apiUrl + this.endpoints.session + session_id,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.session + session_id,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
@@ -230,7 +241,7 @@ class RealTimeCat {
      * @param permanent true/false, 为true时Session永不过期
      * @param data 开发者自定义数据,长度1024
      * @param live_days 存活时间
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
      */
     updateSession({session_id, label, permanent, data, live_days}={}, cb) {
         if (typeof session_id === 'undefined') {
@@ -243,55 +254,67 @@ class RealTimeCat {
             data: data,
             live_days: live_days
         };
-        request.patch({
-            url: this.apiUrl + this.endpoints.session + session_id,
-            form: opts,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.patch({
+                url: this._apiUrl + this._endpoints.session + session_id,
+                form: opts,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Delete a Session 删除单个Session
      * @param session_id Session ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
      */
     delSession(session_id, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        request.del({
-            url: this.apiUrl + this.endpoints.session + session_id,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            if (body) {
-                let response = JSON.parse(body);
-                // handle response errors
-                if (response.error) {
-                    return cb(new Error(response.error + ': ' + response.description));
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.del({
+                url: this._apiUrl + this._endpoints.session + session_id,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
                 }
-            }
-
-            cb(null, {status: "delete successfully"});
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                if (body) {
+                    const response = JSON.parse(body);
+                    if (response.error) {
+                        const error = new Error(`${response.error}: ${response.description}`);
+                        reject(error);
+                        return cb(error);
+                    } // handle response errors
+                }
+                resolve({status: "delete successfully"});
+                cb(null, {status: "delete successfully"});
+            });
         });
     }
 
@@ -304,9 +327,10 @@ class RealTimeCat {
      * @param type 类型,仅可以为pub或sub
      * @param permanent true/false,为true时Token永不过期
      * @param number 创建个数
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
-    createToken({session_id, label, data, live_days, type='pub', permanent=false, number=1}={}, cb) {
+    createToken({session_id, label, data, live_days, type = 'pub', permanent = false, number = 1}={}, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
@@ -319,26 +343,31 @@ class RealTimeCat {
             permanent: permanent,
             number: number
         };
-        request.post({
-            url: this.apiUrl + this.endpoints.tokens.replace('{session_id}', session_id),
-            form: opts,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.post({
+                url: this._apiUrl + this._endpoints.tokens.replace('{session_id}', session_id),
+                form: opts,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
-
     }
 
     /**
@@ -347,13 +376,14 @@ class RealTimeCat {
      * @param opts.session_id Session ID
      * @param opts.page 获取第几页tokens
      * @param opts.page_size 按每页多少条目分页
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
     tokens(opts, cb) {
         if (!opts.session_id) {
             throw new Error('Session Id is required');
         }
-        let url = this.apiUrl + this.endpoints.tokens.replace('{session_id}', opts.session_id);
+        let url = this._apiUrl + this._endpoints.tokens.replace('{session_id}', opts.session_id);
         if (opts.page && opts.page_size) {
             url += '?page=' + opts.page + '&page_size=' + opts.page_size;
         }
@@ -363,113 +393,138 @@ class RealTimeCat {
         else if (opts.page) {
             url += '?page=' + opts.page
         }
-        request({
-            url: url,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: url,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Query Permanent Tokens 获取永久Token列表
      * @param session_id Session ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      * TODO: 增加page和page_size参数
      */
     permanentTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required');
         }
-        request({
-            url: this.apiUrl + this.endpoints.permanentTokens.replace('{session_id}', session_id),
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.permanentTokens.replace('{session_id}', session_id),
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Query Temporary Tokens 获取临时Token列表
      * @param session_id Session ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
      * TODO: 增加page和page_size参数
      */
     temporaryTokens(session_id, cb) {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required');
         }
-        request({
-            url: this.apiUrl + this.endpoints.temporaryTokens.replace('{session_id}', session_id),
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.temporaryTokens.replace('{session_id}', session_id),
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
         });
     }
 
     /**
      * Get a Token 获取单个Token
      * @param token_id Token ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
      */
     token(token_id, cb) {
         if (typeof token_id === 'undefined') {
             throw new Error('Token Id is required')
         }
-        request({
-            url: this.apiUrl + this.endpoints.token + token_id,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
-        });
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request({
+                url: this._apiUrl + this._endpoints.token + token_id,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
+        })
     }
 
     /**
@@ -479,7 +534,8 @@ class RealTimeCat {
      * @param permanent 为true时Token永不过期
      * @param data 开发者自定义数据,长度1024
      * @param live_days 存活时间
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
     updateToken({token_id, label, permanent, data, live_days}={}, cb) {
         if (typeof token_id === 'undefined') {
@@ -492,54 +548,68 @@ class RealTimeCat {
             data: data,
             live_days: live_days
         };
-        request.patch({
-            url: this.apiUrl + this.endpoints.token + token_id,
-            form: opts,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            let response = JSON.parse(body);
-
-            // handle response errors
-            if (response.error) {
-                return cb(new Error(`${response.error}: ${response.description}`))
-            }
-
-            cb(null, response);
-        });
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.patch({
+                url: this._apiUrl + this._endpoints.token + token_id,
+                form: opts,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                const response = JSON.parse(body);
+                if (response.error) {
+                    const error = new Error(`${response.error}: ${response.description}`);
+                    reject(error);
+                    return cb(error)
+                }// handle response errors
+                resolve(response);
+                cb(null, response);
+            });
+        })
     }
 
     /**
      * Delete a Token 删除单个Token
      * @param token_id Token ID
-     * @param cb 回调函数
+     * @param cb 可选，回调函数
+     * @returns {Promise}
      */
     delToken(token_id, cb) {
         if (typeof token_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        request.del({
-            url: this.apiUrl + this.endpoints.token + token_id,
-            headers: {
-                'X-RTCAT-APIKEY': this.apiKey,
-                'X-RTCAT-SECRET': this.apiSecret
-            }
-        }, function (err, resp, body) {
-            if (err) return cb(new Error('The request failed: ' + err));
-
-            if (body) {
-                let response = JSON.parse(body);
-                // handle response errors
-                if (response.error) {
-                    return cb(new Error(response.error + ': ' + response.description));
+        cb = cb || function () {
+            };
+        return new Promise((resolve, reject) => {
+            request.del({
+                url: this._apiUrl + this._endpoints.token + token_id,
+                headers: {
+                    'X-RTCAT-APIKEY': this._apiKey,
+                    'X-RTCAT-SECRET': this._apiSecret
                 }
-            }
-
-            cb(null, {status: "delete successfully"});
+            }, function (err, resp, body) {
+                if (err) {
+                    reject(err);
+                    return cb(err);
+                }
+                if (body) {
+                    const response = JSON.parse(body);
+                    if (response.error) {
+                        const error = new Error(`${response.error}: ${response.description}`);
+                        reject(error);
+                        return cb(error);
+                    } // handle response errors
+                }
+                resolve({status: "delete successfully"});
+                cb(null, {status: "delete successfully"});
+            });
         });
     }
 
