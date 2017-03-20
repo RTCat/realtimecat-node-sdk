@@ -6,6 +6,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var request = require('request');
 
+function noop() {}
+
 /**
  * RealTimeCat Client
  */
@@ -85,7 +87,7 @@ var RealTimeCat = function () {
                 type: type,
                 permanent: permanent
             };
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.post({
                     url: _this._apiUrl + _this._endpoints.sessions,
@@ -99,7 +101,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -129,7 +137,7 @@ var RealTimeCat = function () {
                 cb = opts;
                 opts = {};
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             var url = this._apiUrl + this._endpoints.sessions;
             if (opts.page && opts.page_size) {
                 url += '?page=' + opts.page + '&page_size=' + opts.page_size;
@@ -150,7 +158,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -174,7 +188,7 @@ var RealTimeCat = function () {
         value: function permanentSessions(cb) {
             var _this3 = this;
 
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this3._apiUrl + _this3._endpoints.permanentSessions,
@@ -187,7 +201,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -211,7 +231,7 @@ var RealTimeCat = function () {
         value: function temporarySessions(cb) {
             var _this4 = this;
 
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this4._apiUrl + _this4._endpoints.temporarySessions,
@@ -224,7 +244,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -251,7 +277,7 @@ var RealTimeCat = function () {
             if (typeof session_id === 'undefined') {
                 throw new Error('Session Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this5._apiUrl + _this5._endpoints.session + session_id,
@@ -264,7 +290,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -310,7 +342,7 @@ var RealTimeCat = function () {
                 data: data,
                 live_days: live_days
             };
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.patch({
                     url: _this6._apiUrl + _this6._endpoints.session + session_id,
@@ -324,7 +356,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -350,7 +388,7 @@ var RealTimeCat = function () {
             if (typeof session_id === 'undefined') {
                 throw new Error('Session Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.del({
                     url: _this7._apiUrl + _this7._endpoints.session + session_id,
@@ -364,7 +402,13 @@ var RealTimeCat = function () {
                         return cb(err);
                     }
                     if (body) {
-                        var response = JSON.parse(body);
+                        var response = undefined;
+                        try {
+                            response = JSON.parse(body);
+                        } catch (err) {
+                            reject(err);
+                            return cb(err);
+                        }
                         if (response.error) {
                             var error = new Error(response.error + ': ' + response.description);
                             reject(error);
@@ -421,7 +465,7 @@ var RealTimeCat = function () {
                 permanent: permanent,
                 number: number
             };
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.post({
                     url: _this8._apiUrl + _this8._endpoints.tokens.replace('{session_id}', session_id),
@@ -435,7 +479,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -473,7 +523,7 @@ var RealTimeCat = function () {
             } else if (opts.page) {
                 url += '?page=' + opts.page;
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: url,
@@ -486,7 +536,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -514,7 +570,7 @@ var RealTimeCat = function () {
             if (typeof session_id === 'undefined') {
                 throw new Error('Session Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this10._apiUrl + _this10._endpoints.permanentTokens.replace('{session_id}', session_id),
@@ -527,7 +583,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -554,7 +616,7 @@ var RealTimeCat = function () {
             if (typeof session_id === 'undefined') {
                 throw new Error('Session Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this11._apiUrl + _this11._endpoints.temporaryTokens.replace('{session_id}', session_id),
@@ -567,7 +629,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -593,7 +661,7 @@ var RealTimeCat = function () {
             if (typeof token_id === 'undefined') {
                 throw new Error('Token Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request({
                     url: _this12._apiUrl + _this12._endpoints.token + token_id,
@@ -606,7 +674,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -653,7 +727,7 @@ var RealTimeCat = function () {
                 data: data,
                 live_days: live_days
             };
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.patch({
                     url: _this13._apiUrl + _this13._endpoints.token + token_id,
@@ -667,7 +741,13 @@ var RealTimeCat = function () {
                         reject(err);
                         return cb(err);
                     }
-                    var response = JSON.parse(body);
+                    var response = undefined;
+                    try {
+                        response = JSON.parse(body);
+                    } catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         var error = new Error(response.error + ': ' + response.description);
                         reject(error);
@@ -694,7 +774,7 @@ var RealTimeCat = function () {
             if (typeof token_id === 'undefined') {
                 throw new Error('Session Id is required');
             }
-            cb = cb || function () {};
+            cb = cb || noop;
             return new Promise(function (resolve, reject) {
                 request.del({
                     url: _this14._apiUrl + _this14._endpoints.token + token_id,
@@ -708,7 +788,13 @@ var RealTimeCat = function () {
                         return cb(err);
                     }
                     if (body) {
-                        var response = JSON.parse(body);
+                        var response = undefined;
+                        try {
+                            response = JSON.parse(body);
+                        } catch (err) {
+                            reject(err);
+                            return cb(err);
+                        }
                         if (response.error) {
                             var error = new Error(response.error + ': ' + response.description);
                             reject(error);

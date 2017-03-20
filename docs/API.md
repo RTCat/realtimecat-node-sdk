@@ -1,4 +1,5 @@
 <a name="RealTimeCat"></a>
+
 ## RealTimeCat
 RealTimeCat Client
 
@@ -22,6 +23,7 @@ RealTimeCat Client
     * [.delToken(token_id, cb)](#RealTimeCat+delToken) ⇒ <code>Promise</code>
 
 <a name="new_RealTimeCat_new"></a>
+
 ### new RealTimeCat(apiKey, apiSecret, apiUrl)
 Constructor
 
@@ -33,6 +35,7 @@ Constructor
 | apiUrl | 后端接口地址,形如https://api.realtimecat.com:443 |
 
 <a name="RealTimeCat+createSession"></a>
+
 ### realTimeCat.createSession(label, data, live_days, type, permanent, cb) ⇒ <code>Promise</code>
 Create a Session 新建Session
 
@@ -48,6 +51,7 @@ Create a Session 新建Session
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+sessions"></a>
+
 ### realTimeCat.sessions(opts, cb) ⇒ <code>Promise</code>
 Query Sessions 获取Session列表
 
@@ -61,6 +65,7 @@ Query Sessions 获取Session列表
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+permanentSessions"></a>
+
 ### realTimeCat.permanentSessions(cb) ⇒ <code>Promise</code>
 Query Permanent Sessions 获取永久Session列表
 
@@ -72,6 +77,7 @@ Query Permanent Sessions 获取永久Session列表
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+temporarySessions"></a>
+
 ### realTimeCat.temporarySessions(cb) ⇒ <code>Promise</code>
 Query Temporary Sessions 获取临时Session列表
 
@@ -83,6 +89,7 @@ Query Temporary Sessions 获取临时Session列表
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+session"></a>
+
 ### realTimeCat.session(session_id, cb) ⇒ <code>Promise</code>
 Get a Specific Session 获取单个Session
 
@@ -94,6 +101,7 @@ Get a Specific Session 获取单个Session
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+updateSession"></a>
+
 ### realTimeCat.updateSession(session_id, label, permanent, data, live_days, cb)
 Update a Session 修改单个Session
 
@@ -109,6 +117,7 @@ Update a Session 修改单个Session
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+delSession"></a>
+
 ### realTimeCat.delSession(session_id, cb)
 Delete a Session 删除单个Session
 
@@ -120,6 +129,7 @@ Delete a Session 删除单个Session
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+createToken"></a>
+
 ### realTimeCat.createToken(session_id, label, data, live_days, type, permanent, number, cb) ⇒ <code>Promise</code>
 Create a Token Under a Session 创建Session ID下的Token
 
@@ -137,6 +147,7 @@ Create a Token Under a Session 创建Session ID下的Token
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+tokens"></a>
+
 ### realTimeCat.tokens(opts, cb) ⇒ <code>Promise</code>
 Query Tokens Under a Session 获取Session ID下的所有Token列表
 
@@ -151,6 +162,7 @@ Query Tokens Under a Session 获取Session ID下的所有Token列表
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+permanentTokens"></a>
+
 ### realTimeCat.permanentTokens(session_id, cb) ⇒ <code>Promise</code>
 Query Permanent Tokens 获取永久Token列表
 
@@ -163,6 +175,7 @@ Query Permanent Tokens 获取永久Token列表
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+temporaryTokens"></a>
+
 ### realTimeCat.temporaryTokens(session_id, cb)
 Query Temporary Tokens 获取临时Token列表
 
@@ -174,6 +187,7 @@ Query Temporary Tokens 获取临时Token列表
 | cb | 可选，回调函数 TODO: 增加page和page_size参数 |
 
 <a name="RealTimeCat+token"></a>
+
 ### realTimeCat.token(token_id, cb)
 Get a Token 获取单个Token
 
@@ -185,6 +199,7 @@ Get a Token 获取单个Token
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+updateToken"></a>
+
 ### realTimeCat.updateToken(token_id, label, permanent, data, live_days, cb) ⇒ <code>Promise</code>
 Update a Token 修改单个Token
 
@@ -200,6 +215,7 @@ Update a Token 修改单个Token
 | cb | 可选，回调函数 |
 
 <a name="RealTimeCat+delToken"></a>
+
 ### realTimeCat.delToken(token_id, cb) ⇒ <code>Promise</code>
 Delete a Token 删除单个Token
 

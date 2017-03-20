@@ -2,6 +2,10 @@
 
 const request = require('request');
 
+function noop() {
+
+}
+
 /**
  * RealTimeCat Client
  */
@@ -49,15 +53,14 @@ class RealTimeCat {
      * @returns {Promise}
      */
     createSession({label, data, live_days, type = 'p2p', permanent = false}={}, cb) {
-        let opts = {
+        const opts = {
             label: label,
             data: data,
             live_days: live_days,
             type: type,
             permanent: permanent
         };
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.post({
                 url: this._apiUrl + this._endpoints.sessions,
@@ -71,7 +74,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -96,8 +106,7 @@ class RealTimeCat {
             cb = opts;
             opts = {};
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         let url = this._apiUrl + this._endpoints.sessions;
         if (opts.page && opts.page_size) {
             url += '?page=' + opts.page + '&page_size=' + opts.page_size;
@@ -120,7 +129,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -139,7 +155,7 @@ class RealTimeCat {
      * @todo: 增加page和page_size参数
      */
     permanentSessions(cb) {
-        cb = cb || function () {};
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.permanentSessions,
@@ -152,7 +168,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -172,8 +195,7 @@ class RealTimeCat {
      * @todo: 增加page和page_size参数
      */
     temporarySessions(cb) {
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.temporarySessions,
@@ -186,7 +208,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -208,8 +237,7 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.session + session_id,
@@ -222,7 +250,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -247,15 +282,14 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        let opts = {
+        const opts = {
             session_id: session_id,
             label: label,
             permanent: permanent,
             data: data,
             live_days: live_days
         };
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.patch({
                 url: this._apiUrl + this._endpoints.session + session_id,
@@ -269,7 +303,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -290,8 +331,7 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.del({
                 url: this._apiUrl + this._endpoints.session + session_id,
@@ -305,7 +345,14 @@ class RealTimeCat {
                     return cb(err);
                 }
                 if (body) {
-                    const response = JSON.parse(body);
+                    let response;
+                    try {
+                        response = JSON.parse(body);
+                    }
+                    catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         const error = new Error(`${response.error}: ${response.description}`);
                         reject(error);
@@ -334,7 +381,7 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        let opts = {
+        const opts = {
             session_id: session_id,
             label: label,
             data: data,
@@ -343,8 +390,7 @@ class RealTimeCat {
             permanent: permanent,
             number: number
         };
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.post({
                 url: this._apiUrl + this._endpoints.tokens.replace('{session_id}', session_id),
@@ -358,7 +404,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -393,8 +446,7 @@ class RealTimeCat {
         else if (opts.page) {
             url += '?page=' + opts.page
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: url,
@@ -407,7 +459,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -430,8 +489,7 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required');
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.permanentTokens.replace('{session_id}', session_id),
@@ -444,7 +502,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -466,8 +531,7 @@ class RealTimeCat {
         if (typeof session_id === 'undefined') {
             throw new Error('Session Id is required');
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.temporaryTokens.replace('{session_id}', session_id),
@@ -480,7 +544,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -501,8 +572,7 @@ class RealTimeCat {
         if (typeof token_id === 'undefined') {
             throw new Error('Token Id is required')
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request({
                 url: this._apiUrl + this._endpoints.token + token_id,
@@ -515,7 +585,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -541,15 +618,14 @@ class RealTimeCat {
         if (typeof token_id === 'undefined') {
             throw new Error('Token Id is required')
         }
-        let opts = {
+        const opts = {
             token_id: token_id,
             label: label,
             permanent: permanent,
             data: data,
             live_days: live_days
         };
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.patch({
                 url: this._apiUrl + this._endpoints.token + token_id,
@@ -563,7 +639,14 @@ class RealTimeCat {
                     reject(err);
                     return cb(err);
                 }
-                const response = JSON.parse(body);
+                let response;
+                try {
+                    response = JSON.parse(body);
+                }
+                catch (err) {
+                    reject(err);
+                    return cb(err);
+                }
                 if (response.error) {
                     const error = new Error(`${response.error}: ${response.description}`);
                     reject(error);
@@ -585,8 +668,7 @@ class RealTimeCat {
         if (typeof token_id === 'undefined') {
             throw new Error('Session Id is required')
         }
-        cb = cb || function () {
-            };
+        cb = cb || noop;
         return new Promise((resolve, reject) => {
             request.del({
                 url: this._apiUrl + this._endpoints.token + token_id,
@@ -600,7 +682,14 @@ class RealTimeCat {
                     return cb(err);
                 }
                 if (body) {
-                    const response = JSON.parse(body);
+                    let response;
+                    try {
+                        response = JSON.parse(body);
+                    }
+                    catch (err) {
+                        reject(err);
+                        return cb(err);
+                    }
                     if (response.error) {
                         const error = new Error(`${response.error}: ${response.description}`);
                         reject(error);
